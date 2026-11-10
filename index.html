@@ -1,0 +1,226 @@
+<!doctype html>
+<!-- © 2026 Азерин Владимир Александрович, ВолгГМУ, группа 613 леч. Научная работа студентов ВолгГМУ. Код приложения создан Азериным В. А. Сборка 2026-11-10. --><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Когнитивный помощник</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="author" content="Азерин Владимир Александрович"><meta name="copyright" content="© 2026 Азерин В. А., ВолгГМУ, 613 леч"><meta name="theme-color" content="#F7F5F0"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#F7F5F0;color:#1C2A33}
+.s{display:none;min-height:100vh;padding:max(40px,env(safe-area-inset-top)) 24px 28px;flex-direction:column;gap:18px;max-width:480px;margin:0 auto}.s.on{display:flex}
+h1{margin:0;font-size:34px;line-height:1.15}button{font:inherit;cursor:pointer}.sub{font-size:18px;color:#4A5961}
+.card{background:#fff;border:1px solid #D9D4C8;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.big{height:64px;border:0;border-radius:16px;background:#534AB7;color:#fff;font-size:22px;font-weight:600;width:100%}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{min-height:150px;text-align:left;padding:16px;background:#fff;border:1px solid #D9D4C8;border-radius:16px;color:#1C2A33;display:flex;flex-direction:column}
+.ic{width:40px;height:40px;border-radius:20px;display:flex;align-items:center;justify-content:center}
+.tile b{font-size:20px;margin-top:12px;line-height:1.15}.tile .t{font-size:16px;color:#4A5961;margin-top:6px}
+.back{align-self:flex-start;background:none;border:0;font-size:20px;color:#534AB7;padding:8px 0;font-weight:600}
+input{height:64px;font-size:24px;padding:0 16px;border:2px solid #D9D4C8;border-radius:16px;width:100%;font-family:inherit}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.c{aspect-ratio:1/1.1;border:0;border-radius:16px;background:#534AB7;font-size:44px;font-weight:700}.c.o{background:#fff;border:2px solid #D9D4C8}.c.d{background:#DDF3EA;border:2px solid #0F6E56}
+.bar{height:12px;border-radius:6px;background:#E4DFD2;margin-top:6px}.bar i{display:block;height:12px;border-radius:6px;background:#0F6E56}
+.row{display:flex;justify-content:space-between;font-size:20px}.cap{margin-top:auto;font-size:14px;color:#4A5961;text-align:center}
+.opt{min-height:72px;font-size:24px;font-weight:600;border:2px solid #D9D4C8;border-radius:16px;background:#fff;color:#1C2A33}.opt.sel{background:#E9E7FB;border-color:#534AB7;color:#3C3489}
+@media print{.np,#toast,#nav{display:none!important}body{background:#fff}.s{padding:0!important}}
+#nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid #D9D4C8;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+body.nv #nav{display:flex}body.nv .s{padding-bottom:calc(104px + env(safe-area-inset-bottom))}body.nv #toast{bottom:100px}
+#nav button{flex:1;background:none;border:0;min-height:76px;padding:8px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:600;color:#4A5961;line-height:1.15;letter-spacing:-.2px}
+#nav button.on{color:#534AB7}#nav svg{stroke:currentColor}
+.lb{font-size:16px;color:#534AB7;font-weight:600}.nm{font-size:22px;line-height:1.4}
+.sg{flex:1;height:52px;border-radius:14px;font-size:19px;font-weight:700;border:2px solid #534AB7;background:#fff;color:#534AB7}.sg.on{background:#534AB7;color:#fff}
+.mb{height:56px;border:0;border-radius:14px;font-size:20px;font-weight:700}.mb.ok{background:#0F6E56;color:#fff}.mb.no{background:#fff;color:#A32D2D;border:2px solid #A32D2D}
+#toast{display:none;position:fixed;left:24px;right:24px;bottom:28px;background:#1C2A33;color:#fff;padding:16px;border-radius:14px;font-size:18px;text-align:center}
+</style></head><body>
+<section class="s" id="name"><img src="logo.png" alt="Логотип ВолгГМУ" style="height:120px;align-self:center;margin-top:20px"><h1>Здравствуйте!</h1><p class="sub">Как вас зовут?</p><input id="nm" autocomplete="given-name" aria-label="Ваше имя"><button class="big" onclick="setName()">Продолжить</button></section>
+<section class="s" id="home">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div><div class="sub" id="date"></div><h1 id="hi"></h1></div><img src="logo.png" alt="Логотип ВолгГМУ" style="height:64px;flex:none"></div>
+<div class="card"><div style="font-size:16px;color:#534AB7;font-weight:600">Задание на сегодня</div><div style="font-size:26px;font-weight:600;line-height:1.2">Тренировка памяти</div><div class="sub">Около 3 минут</div><button class="big" onclick="pairs()">Начать</button></div>
+<div class="card" id="hmed"></div>
+<div class="card" style="flex-direction:row;align-items:center;justify-content:space-between;padding:14px 18px"><span class="sub">Серия</span><span id="dots" style="display:flex;align-items:center;gap:8px"></span></div>
+<button id="callb" onclick="callRel()" style="margin-top:auto;min-height:76px;border:0;border-radius:18px;background:#A32D2D;color:#fff;font-size:24px;font-weight:700">Позвонить близким</button>
+<div class="cap" style="margin-top:0">Научная работа студентов ВолгГМУ, 613 леч</div></section>
+<section class="s" id="game"><button class="back" onclick="go('home')">‹ Назад</button><h1>Найдите пары</h1><div class="sub" id="mv"></div>
+<div class="cards" id="board"></div>
+<div class="card" id="done" style="display:none"><div style="font-size:26px;font-weight:700">Готово!</div><div id="dres" style="font-size:22px;line-height:1.5"></div><button class="big" onclick="go('home')">На главную</button></div></section>
+<section class="s" id="results"><h1>Результаты</h1><div class="sub" id="cnt"></div>
+<div class="card" id="rbars" style="gap:16px"></div><div class="card"><div style="font-size:20px;font-weight:600">Динамика: память</div><div id="chart"></div></div><button class="big" style="background:#fff;color:#534AB7;border:2px solid #534AB7" onclick="go('report')">Отчёт для врача</button></section>
+<section class="s" id="meds"><h1>Здоровье</h1><div id="mbody" style="display:flex;flex-direction:column;gap:18px"></div></section>
+<section class="s" id="more"><h1>Ещё</h1>
+<button class="tile" style="min-height:96px;justify-content:center" onclick="go('family')"><b style="margin:0">Врач и семья</b><span class="t">Отчёт, письмо врачу, близкий человек</span></button>
+<button class="tile" style="min-height:96px;justify-content:center" onclick="go('about')"><b style="margin:0">О приложении</b><span class="t">Авторы, версия</span></button></section>
+<section class="s" id="about"><button class="back" onclick="go('more')">‹ Назад</button><img src="logo.png" alt="Логотип ВолгГМУ" style="height:120px;align-self:center"><h1 style="text-align:center">О приложении</h1><p class="sub" style="text-align:center;margin:0">Помощник для тренировки памяти и внимания у пожилых людей</p><div class="card" style="gap:16px"><div><div class="lb">Научный руководитель</div><div id="sup" class="nm"></div></div><div><div class="lb">Разработчик приложения</div><div id="dev" class="nm"></div></div><div><div class="lb">Участники научной работы</div><div id="crew" class="nm"></div></div></div><div class="card"><div class="sub">Научная работа студентов ВолгГМУ, 613 леч</div><div class="sub">Версия 0.13</div></div><p class="sub" style="font-size:16px;margin:0">Приложение не заменяет консультацию врача и не ставит диагноз.</p></section>
+<section class="s" id="tests"><h1>Тесты и тренинги</h1><div class="sub" style="font-weight:600">Тесты</div>
+<button class="tile" style="min-height:96px;justify-content:center" onclick="words()"><b style="margin:0">Запоминание слов</b><span class="t">5 слов, около 3 минут</span></button>
+<button class="tile" style="min-height:96px;justify-content:center" onclick="clock()"><b style="margin:0">Тест часов</b><span class="t">Рисование пальцем, около 3 минут</span></button>
+<div class="sub" style="font-weight:600;margin-top:6px">Тренинги</div>
+<button class="tile" style="min-height:96px;justify-content:center" onclick="pairs()"><b style="margin:0">Найдите пары</b><span class="t">Память и внимание, около 3 минут</span></button></section>
+<section class="s" id="words"><button class="back" onclick="wexit()">‹ Назад</button><div id="wbody" style="display:flex;flex-direction:column;gap:18px"></div></section>
+<section class="s" id="clock"><button class="back" onclick="go('tests')">‹ Назад</button><div id="cbody" style="display:flex;flex-direction:column;gap:18px"></div></section>
+<section class="s" id="family"><button class="back" onclick="go('more')">‹ Назад</button><h1>Врач и семья</h1>
+<div class="card"><div style="font-size:22px;font-weight:600">Отчёт для врача</div><div class="sub">Результаты, динамика и рисунки часов на одной странице</div><button class="big" onclick="go('report')">Открыть отчёт</button><button class="big" style="background:#fff;color:#534AB7;border:2px solid #534AB7" onclick="share()">Отправить отчёт</button></div>
+<div class="card" id="dcbox"></div>
+<div class="card" id="ctbox"></div></section>
+<section class="s" id="report"><button class="back np" onclick="go(RFROM||'family')">‹ Назад</button><div id="rbody"></div>
+<div class="np" style="display:flex;flex-direction:column;gap:12px"><button class="big" onclick="print()">Сохранить как PDF</button><button class="big" style="background:#fff;color:#534AB7;border:2px solid #534AB7" onclick="share()">Поделиться</button><p class="sub" style="font-size:16px;margin:0">В окне печати выберите «Сохранить как PDF».</p></div></section>
+<nav id="nav" aria-label="Разделы">
+<button data-t="home" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/></svg>Главная</button>
+<button data-t="tests" onclick="go('tests')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 12l2 2 4-4"/></svg>Тесты и тренинги</button>
+<button data-t="meds" onclick="go('meds')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"/></svg>Здоровье</button>
+<button data-t="results" onclick="go('results')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20V12M12 20V5M18 20v-6"/></svg>Результаты</button>
+<button data-t="more" onclick="go('more')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>Ещё</button></nav>
+<div id="rem" class="np" style="display:none;position:fixed;top:12px;left:12px;right:12px;max-width:456px;margin:0 auto;background:#fff;border:2px solid #A32D2D;border-radius:18px;padding:16px;z-index:10;box-shadow:0 6px 24px rgba(0,0,0,.18)"></div>
+<div id="toast">Этот раздел появится в следующей версии</div>
+<script>
+/* © 2026 Азерин В. А., ВолгГМУ, 613 леч. Метка сборки: AVA-613-VGMU-20261110-k7Qx2 */
+const _sig="AVA-613-VGMU-20261110-k7Qx2";function __vgmu613_ava(){return _sig}document.documentElement.setAttribute("data-build",_sig);
+const SUP='Ивахненко Ирина Вячеславовна';/* научный руководитель */
+const DEV=['Азерин Владимир Александрович'];/* разработчик приложения */
+const CREW=['Дорошенко Родион Романович','Беляев Даниил Игоревич'];/* участники научной работы, добавлять сюда */
+const $=i=>document.getElementById(i);let D={name:'',res:[]};
+try{D=Object.assign(D,JSON.parse(localStorage.getItem('cog')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('cog',JSON.stringify(D))}catch(e){}};D.meds=D.meds||[];D.mlog=D.mlog||[];D.bp=D.bp||[];
+let CUR='',RFROM='';const TAB={home:'home',tests:'tests',meds:'meds',results:'results',more:'more',family:'more',about:'more',report:'more'};
+function go(id,keep){if(id==='report')RFROM=CUR;CUR=id;document.querySelectorAll('.s').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0);
+const tab=id==='report'&&RFROM==='results'?'results':TAB[id];document.body.classList.toggle('nv',!!tab);document.querySelectorAll('#nav button').forEach(b=>{const on=b.dataset.t===tab;b.classList.toggle('on',on);b.setAttribute('aria-current',on?'page':'false')});
+if(id==='home'){home();callUI();homeMed()}if(id==='meds'){if(!keep)MF=null;meds()}if(id==='results')results();if(id==='about'){const f=a=>a.map(n=>'<div>'+n+'</div>').join('');$('sup').textContent=SUP;$('dev').innerHTML=f(DEV);$('crew').innerHTML=f(CREW)}if(id==='family'){EDIT=false;DEDIT=false;fam()}if(id==='report')report();remCheck()}
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t.h);t.h=setTimeout(()=>t.style.display='none',2500)}
+function soon(){toast('Этот раздел появится в следующей версии')}
+function setName(){const v=$('nm').value.trim();if(!v){$('nm').focus();return}D.name=v;save();go('home')}
+function streak(){const s=new Set(D.res.map(r=>r.t.slice(0,10)));let n=0,d=new Date();if(!s.has(d.toISOString().slice(0,10)))d.setDate(d.getDate()-1);while(s.has(d.toISOString().slice(0,10))){n++;d.setDate(d.getDate()-1)}return n}
+function home(){const h=new Date().getHours(),g=h<6?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
+$('hi').textContent=g+', '+D.name+'!';const t=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});$('date').textContent=t[0].toUpperCase()+t.slice(1);
+const n=streak();$('dots').innerHTML=[0,1,2,3,4].map(i=>`<span style="width:14px;height:14px;border-radius:7px;background:${i<n?'#534AB7':'#E4DFD2'}"></span>`).join('')+`<b style="font-size:18px;margin-left:6px">${n} дн.</b>`}
+const SY=['●','▲','■','★','♥','◆'],CO={'●':'#534AB7','▲':'#0F6E56','■':'#185FA5','★':'#854F0B','♥':'#A32D2D','◆':'#3C3489'};let G;
+function pairs(){go('game');G={d:[...SY,...SY].sort(()=>Math.random()-.5),o:[],fd:new Set(),mv:0,err:0,seen:new Set(),t:Date.now(),lock:false};$('done').style.display='none';$('board').style.display='grid';draw()}
+function draw(){$('mv').textContent='Ходов: '+G.mv;$('board').innerHTML=G.d.map((s,i)=>{const f=G.fd.has(i),o=G.o.includes(i),v=f||o;return `<button class="c ${f?'d':o?'o':''}" data-i="${i}" aria-label="${v?s:'Карточка'}" style="${v?'color:'+CO[s]:''}">${v?s:''}</button>`}).join('')}
+$('board').onclick=e=>{const b=e.target.closest('.c');if(!b||G.lock)return;const i=+b.dataset.i;if(G.o.includes(i)||G.fd.has(i))return;G.o.push(i);
+if(G.o.length<2){draw();return}G.mv++;const[a,c]=G.o;const kn=i=>G.d.some((s,j)=>j!==i&&s===G.d[i]&&G.seen.has(j));if(G.d[a]!==G.d[c]&&kn(a))G.err++;G.seen.add(a);G.seen.add(c);
+if(G.d[a]===G.d[c]){G.fd.add(a);G.fd.add(c);G.o=[];draw();if(G.fd.size===12)finish()}else{draw();G.lock=true;setTimeout(()=>{G.o=[];G.lock=false;draw()},900)}};
+function finish(){const sec=(Date.now()-G.t)/1000,cl=v=>Math.max(20,Math.min(100,Math.round(v))),mem=cl(100-G.err*15),att=cl(100-(sec-30)*.8);
+D.res.push({t:new Date().toISOString(),kind:'pairs',mem,att,err:G.err,mv:G.mv});save();$('board').style.display='none';$('done').style.display='flex';$('dres').innerHTML=`Память: <b>${mem}%</b><br>Внимание: <b>${att}%</b><br><span class="sub" style="font-size:16px">Ошибок памяти: ${G.err}, ходов: ${G.mv}</span>`}
+const WAIT=60;/* секунд ожидания перед вспоминанием слов */
+const WD=[['яблоко','стол','река','книга','лампа'],['дом','цветок','машина','часы','птица'],['окно','хлеб','кошка','мост','зонт']],DP=['лес','чашка','ключ','диван','солнце','сапог','дождь','письмо','гора','ложка','ветер','мяч','шапка','огонь','стул'];let W={};
+const shuf=a=>[...a].sort(()=>Math.random()-.5);
+function words(){W={t:WD[Math.floor(Math.random()*WD.length)],ph:'intro',sel:new Set()};W.o=shuf([...W.t,...shuf(DP).slice(0,5)]);go('words');wr()}
+function wexit(){clearInterval(W.iv);go('tests')}
+function skipWait(){clearInterval(W.iv);W.ph='recall';wr()}
+function startWait(){W.ph='wait';wr();W.left=WAIT;$('cd').textContent=W.left;W.iv=setInterval(()=>{W.left--;if(W.left<=0)skipWait();else $('cd').textContent=W.left},1000)}
+function tg(b){const w=b.dataset.w;W.sel.has(w)?W.sel.delete(w):W.sel.add(w);b.classList.toggle('sel');b.setAttribute('aria-pressed',W.sel.has(w))}
+function wfin(){const hit=[...W.sel].filter(w=>W.t.includes(w)).length,miss=W.sel.size-hit,mem=Math.round(Math.max(0,hit-miss)/5*100);
+D.res.push({t:new Date().toISOString(),kind:'words',mem,hit,miss});save();W.ph='done';W.r={hit,miss,mem};wr()}
+function wr(){const b=$('wbody'),big=(t,f)=>`<button class="big" onclick="${f}">${t}</button>`,p='font-size:22px;line-height:1.4;margin:0';
+if(W.ph==='intro')b.innerHTML=`<h1>Запоминание слов</h1><p class="sub" style="${p}">Сейчас вы увидите 5 слов. Постарайтесь их запомнить. Позже нужно будет вспомнить их.</p>`+big('Показать слова',"W.ph='show';wr()");
+if(W.ph==='show')b.innerHTML=`<h1>Запомните слова</h1><div class="card" style="gap:14px">${W.t.map(w=>`<div style="font-size:34px;font-weight:700">${w}</div>`).join('')}</div>`+big('Я запомнил(а)','startWait()');
+if(W.ph==='wait')b.innerHTML=`<h1>Немного подождите</h1><p class="sub" style="${p}">Отдохните. Через <b id="cd"></b> сек. нужно будет вспомнить слова.</p><button class="back" onclick="skipWait()">Пропустить ожидание (для демонстрации)</button>`;
+if(W.ph==='recall')b.innerHTML=`<h1>Что вы запомнили?</h1><p class="sub" style="${p}">Нажмите на слова, которые вы видели.</p><div class="grid">${W.o.map(w=>`<button class="opt" data-w="${w}" aria-pressed="false" onclick="tg(this)">${w}</button>`).join('')}</div>`+big('Готово','wfin()');
+if(W.ph==='done')b.innerHTML=`<h1>Готово!</h1><div class="card"><div style="font-size:22px;line-height:1.5">Верно вспомнили: <b>${W.r.hit} из 5</b><br>Лишних слов: <b>${W.r.miss}</b><br>Память: <b>${W.r.mem}%</b></div><div class="sub" style="font-size:16px">Были слова: ${W.t.join(', ')}</div></div>`+big('На главную',"go('home')")}
+const CT=[[11,10],[8,20],[1,45],[2,50],[7,25]],hw=h=>h===1?'час':h<5?'часа':'часов';/* время на часах: добавляйте пары [часы, минуты] */
+const cq=()=>['Круг замкнут и похож на циферблат','Все 12 цифр на месте','Цифры стоят по порядку и по кругу','Стрелки показывают '+C.tt];let C={};
+function clock(){const t=CT[Math.floor(Math.random()*CT.length)];C={ph:'intro',a:[null,null,null,null],tm:t,tt:t[0]+' '+hw(t[0])+' '+t[1]+' минут'};go('clock');cr()}
+function cdraw(){const cv=$('cv'),r=cv.getBoundingClientRect(),k=devicePixelRatio||1;cv.width=r.width*k;cv.height=r.width*k;const x=cv.getContext('2d');x.scale(k,k);x.fillStyle='#fff';x.fillRect(0,0,r.width,r.width);x.lineWidth=4;x.lineCap='round';x.lineJoin='round';x.strokeStyle='#1C2A33';
+let d=false,l;const pt=e=>{const b=cv.getBoundingClientRect();return[e.clientX-b.left,e.clientY-b.top]};
+cv.onpointerdown=e=>{d=true;C.any=true;l=pt(e);cv.setPointerCapture(e.pointerId);x.beginPath();x.moveTo(l[0],l[1]);x.lineTo(l[0]+.1,l[1]+.1);x.stroke();e.preventDefault()};
+cv.onpointermove=e=>{if(!d)return;const p=pt(e);x.beginPath();x.moveTo(l[0],l[1]);x.lineTo(p[0],p[1]);x.stroke();l=p};
+cv.onpointerup=cv.onpointercancel=()=>{d=false}}
+function cclear(){C.any=false;cdraw()}
+function cfin(){if(!C.any){toast('Сначала нарисуйте часы');return}const t=document.createElement('canvas');t.width=t.height=300;const x=t.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,300,300);x.drawImage($('cv'),0,0,300,300);C.img=t.toDataURL('image/jpeg',.7);C.ph='check';cr()}
+function ca(i,v){C.a[i]=v;document.querySelectorAll('[data-q="'+i+'"]').forEach(b=>b.classList.toggle('sel',+b.dataset.v===v))}
+function csave(){if(C.a.includes(null)){toast('Ответьте на все вопросы');return}const sc=Math.round(C.a.filter(v=>v===1).length/4*100);
+D.res.push({t:new Date().toISOString(),kind:'clock',time:C.tm.join(':'),log:sc,checks:C.a,img:C.img});D.res.filter(x=>x.img).slice(0,-10).forEach(x=>{delete x.img});save();C.s=sc;C.ph='done';cr()}
+function cr(){const b=$('cbody'),big=(t,f)=>`<button class="big" onclick="${f}">${t}</button>`,p='font-size:22px;line-height:1.4;margin:0',im=`<img src="${C.img||''}" alt="Нарисованные часы" style="width:100%;max-width:240px;align-self:center;border-radius:16px;border:1px solid #D9D4C8">`;
+if(C.ph==='intro')b.innerHTML=`<h1>Тест часов</h1><p class="sub" style="${p}">Нарисуйте пальцем круглые часы с цифрами. Стрелками покажите ${C.tt}.</p>`+big('Начать рисовать',"C.ph='draw';cr()");
+if(C.ph==='draw'){b.innerHTML=`<h1>Нарисуйте часы</h1><p class="sub" style="${p}">Стрелки: ${C.tt}</p><canvas id="cv" role="img" aria-label="Поле для рисования часов" style="width:100%;aspect-ratio:1;display:block;touch-action:none;background:#fff;border:1px solid #D9D4C8;border-radius:20px"></canvas><div style="display:flex;gap:12px"><button class="big" style="background:#fff;color:#534AB7;border:2px solid #534AB7" onclick="cclear()">Очистить</button><button class="big" onclick="cfin()">Готово</button></div>`;cdraw()}
+if(C.ph==='check')b.innerHTML=`<h1>Оценка рисунка</h1><p class="sub" style="font-size:18px;margin:0">Эту часть заполняет врач или помощник.</p>${im}`+cq().map((q,i)=>`<div class="card"><div style="font-size:20px">${q}</div><div class="grid"><button class="opt" data-q="${i}" data-v="1" onclick="ca(${i},1)">Да</button><button class="opt" data-q="${i}" data-v="0" onclick="ca(${i},0)">Нет</button></div></div>`).join('')+big('Сохранить','csave()');
+if(C.ph==='done')b.innerHTML=`<h1>Готово!</h1><div class="card"><div style="font-size:22px">Оценка рисунка: <b>${C.s}%</b></div>${im}</div>`+big('На главную',"go('home')")}
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let EDIT=false,DEDIT=false;
+function dfam(){const d=D.dc,b=$('dcbox'),h='<div style="font-size:22px;font-weight:600">Письмо врачу</div>';
+if(d&&!DEDIT)b.innerHTML=h+`<div style="font-size:22px">${esc(d.name||'Врач')}<br><span class="sub">${esc(d.email)}</span></div><button class="big" onclick="mailDoc()">Написать врачу</button><button class="back" onclick="DEDIT=true;dfam()">Изменить</button>`;
+else b.innerHTML=h+`<div class="sub" style="font-size:16px">Письмо с результатами откроется в вашей почте, останется нажать «Отправить»</div><input id="dn" placeholder="Имя врача (необязательно)" aria-label="Имя врача" value="${esc(d?d.name||'':'')}"><input id="de" type="email" placeholder="Почта врача" aria-label="Почта врача" value="${esc(d?d.email:'')}"><button class="big" onclick="dcsave()">Сохранить</button>`}
+function dcsave(){const n=$('dn').value.trim(),e=$('de').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){toast('Введите правильную почту');return}D.dc={name:n,email:e};DEDIT=false;save();dfam()}
+function mailDoc(){const d=D.dc;if(!d)return;const body=(d.name?'Здравствуйте, '+d.name+'!\n\n':'Здравствуйте!\n\n')+'Направляю результаты тренировок памяти и внимания.\n\n'+rtext()+'\n\nС уважением, '+D.name;location.href='mailto:'+encodeURIComponent(d.email).replace('%40','@')+'?subject='+encodeURIComponent('Результаты тренировок: '+D.name)+'&body='+encodeURIComponent(body)}
+function fam(){dfam();const c=D.ct,b=$('ctbox'),h='<div style="font-size:22px;font-weight:600">Близкий человек</div>';
+if(c&&!EDIT)b.innerHTML=h+`<div style="font-size:22px">${esc(c.name)}<br><span class="sub">${esc(c.phone)}</span></div><a href="tel:${esc(c.phone.replace(/[^\d+]/g,''))}" style="display:flex;align-items:center;justify-content:center;height:72px;border-radius:18px;background:#A32D2D;color:#fff;font-size:24px;font-weight:700;text-decoration:none">Позвонить близким</a><button class="back" onclick="EDIT=true;fam()">Изменить</button>`;
+else b.innerHTML=h+`<div class="sub" style="font-size:16px">Кому звонить одним нажатием</div><input id="cn" placeholder="Имя" aria-label="Имя близкого" value="${esc(c?c.name:'')}"><input id="cp" type="tel" placeholder="Номер телефона" aria-label="Номер телефона" value="${esc(c?c.phone:'')}"><button class="big" onclick="ctsave()">Сохранить</button>`}
+function ctsave(){const n=$('cn').value.trim(),p=$('cp').value.trim();if(!n||p.replace(/\D/g,'').length<5){toast('Введите имя и номер');return}D.ct={name:n,phone:p};EDIT=false;save();fam()}
+const KN={pairs:'Найдите пары',words:'Запоминание слов',clock:'Тест часов'};
+const rdate=t=>{const d=new Date(t);return d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
+function rstat(k){const a=D.res.filter(x=>x[k]!=null).map(x=>x[k]);return{last:a.length?a[a.length-1]:null,avg:a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):null,n:a.length}}
+function report(){const r=D.res,pc=v=>v==null?'—':v+'%',td='padding:8px 4px;border-bottom:1px solid #E4DFD2;vertical-align:top',th='text-align:left;padding:6px 4px;border-bottom:2px solid #D9D4C8';
+const rows=[['Память','mem'],['Внимание','att'],['Логика','log']].map(([n,k])=>{const s=rstat(k);return`<tr><td style="${td}">${n} <span style="font-size:13px;color:#4A5961">(${s.n})</span></td><td style="${td}"><b>${pc(s.last)}</b></td><td style="${td}">${pc(s.avg)}</td></tr>`}).join('');
+const ses=r.slice(-15).reverse().map(x=>{const k=x.kind||(x.att!=null?'pairs':'');let v='';if(k==='pairs')v=`память ${x.mem}%, внимание ${x.att}%`;if(k==='words')v=`память ${x.mem}% (верно ${x.hit}, лишних ${x.miss})`;if(k==='clock')v=`логика ${x.log}%, время ${x.time||'—'}`;return`<tr><td style="${td}">${rdate(x.t)}</td><td style="${td}">${KN[k]||''}</td><td style="${td}">${v}</td></tr>`}).join('');
+const im=r.filter(x=>x.img).slice(-6).map(x=>`<figure style="margin:0"><img src="${x.img}" alt="Рисунок часов" style="width:100%;border:1px solid #D9D4C8"><figcaption style="font-size:13px;margin-top:4px">${rdate(x.t)}, ${x.log}%</figcaption></figure>`).join('');
+$('rbody').innerHTML=`<div class="card" style="gap:14px"><div style="display:flex;align-items:center;gap:14px"><img src="logo.png" alt="" style="height:64px"><div><div style="font-size:26px;font-weight:700;line-height:1.15">Отчёт о тренировках</div><div class="sub" style="font-size:16px">${rdate(new Date())}</div></div></div>
+<div style="font-size:20px;line-height:1.5">Пациент: <b>${esc(D.name)}</b><br>Занятий: <b>${r.length}</b></div>`+(r.length?`<table style="width:100%;border-collapse:collapse;font-size:16px"><tr><th style="${th}">Область (замеров)</th><th style="${th}">Последний</th><th style="${th}">Среднее</th></tr>${rows}</table>
+<div style="font-size:18px;font-weight:600">Последние занятия</div><table style="width:100%;border-collapse:collapse;font-size:15px">${ses}</table>`+(im?`<div style="font-size:18px;font-weight:600">Рисунки часов</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${im}</div>`:''):'<p class="sub" style="margin:0">Данных пока нет. Пройдите тесты или тренировки.</p>')+medChart()+bpTable()+`<div class="sub" style="font-size:13px">Скрининговый инструмент, не ставит диагноз. Оценку проводит врач. Научная работа студентов ВолгГМУ, 613 леч.</div></div>`}
+function rtext(){medChart();const ml=MST.tot?`\nПриём лекарств за 7 дней: ${MST.tk} из ${MST.tot}`:'';const lb=D.bp.filter(x=>x.sys!=null).slice(-1)[0],bl=lb?`\nПоследнее давление: ${lb.sys}/${lb.dia}${lb.pl!=null?', пульс '+lb.pl:''} (${new Date(lb.t).toLocaleDateString('ru-RU')})`:'';const v=k=>{const x=rstat(k).last;return x==null?'—':x+'%'};return`Отчёт о тренировках (${new Date().toLocaleDateString('ru-RU')})\nПациент: ${D.name}\nПамять: ${v('mem')}, внимание: ${v('att')}, логика: ${v('log')}\nЗанятий: ${D.res.length}${ml}${bl}\nНаучная работа студентов ВолгГМУ, 613 леч`}
+async function share(){const t=rtext();try{if(navigator.share){await navigator.share({title:'Отчёт о тренировках',text:t});return}}catch(e){if(e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);toast('Отчёт скопирован, вставьте его в сообщение')}catch(e){toast('Не удалось поделиться')}}
+const dk=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const nowHM=()=>{const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+const mget=k=>D.mlog.find(x=>x.k===k);let MF=null,MST={tk:0,tot:0};const SNZ={},NOTIF={};
+function dosesToday(){const d=dk(new Date()),o=[];D.meds.forEach(m=>m.times.forEach(t=>{const k=m.id+'|'+d+'|'+t;o.push({m,t,k,e:mget(k)})}));return o.sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:0)}
+function mark(k,st){const o=dosesToday().find(x=>x.k===k);if(!o||o.e)return;D.mlog.push({k,id:o.m.id,name:o.m.name,dose:o.m.dose,date:dk(new Date()),time:o.t,st,at:new Date().toISOString()});if(st==='taken'&&o.m.stock!=null)o.m.stock=Math.max(0,o.m.stock-(o.m.per||1));save();refreshMeds()}
+function refreshMeds(){if(CUR==='meds')meds();if(CUR==='home')homeMed();remCheck()}
+function snooze(k){SNZ[k]=Date.now()+600000;remCheck()}
+function remCheck(){const el=$('rem');if(!el)return;const act=['name','game','words','clock'].includes(CUR),now=nowHM();
+const due=act?null:dosesToday().find(o=>!o.e&&o.t<=now&&!(SNZ[o.k]>Date.now()));
+if(!due){el.style.display='none';return}
+el.innerHTML=`<div style="font-size:18px;font-weight:700;color:#A32D2D">Пора принять лекарство</div><div style="font-size:24px;font-weight:700;margin:4px 0">${esc(due.m.name)}</div><div class="sub" style="font-size:18px;margin-bottom:10px">${esc(due.m.dose||'')} · ${due.t}</div><div style="display:flex;gap:8px"><button class="mb ok" style="flex:1" onclick="mark('${due.k}','taken')">Принял</button><button class="mb no" style="flex:1" onclick="mark('${due.k}','missed')">Пропустил</button><button class="mb" style="flex:1;background:#E4DFD2;color:#1C2A33" onclick="snooze('${due.k}')">Позже</button></div>`;el.style.display='block';
+if(!NOTIF[due.k]&&document.hidden&&'Notification' in window&&Notification.permission==='granted'&&navigator.serviceWorker){NOTIF[due.k]=1;navigator.serviceWorker.ready.then(r=>r.showNotification('Пора принять лекарство',{body:due.m.name+' '+(due.m.dose||'')})).catch(()=>{})}}
+function homeMed(){const b=$('hmed'),h='<div style="font-size:16px;color:#534AB7;font-weight:600">Лекарства на сегодня</div>';
+if(!D.meds.length){b.innerHTML=h+'<div class="sub">Добавьте лекарства, и приложение будет напоминать о приёме.</div><button class="big" style="background:#fff;color:#534AB7;border:2px solid #534AB7" onclick="HT=\'med\';medForm();go(\'meds\',1)">Добавить лекарство</button>';return}
+const p=dosesToday().filter(o=>!o.e),n=p[0];
+b.innerHTML=h+(n?`<div style="display:flex;gap:14px;align-items:center"><div style="font-size:30px;font-weight:700">${n.t}</div><div><div style="font-size:22px;font-weight:600">${esc(n.m.name)}</div><div class="sub" style="font-size:16px">${esc(n.m.dose||'')}</div></div></div><div style="display:flex;gap:10px"><button class="mb ok" style="flex:1" onclick="mark('${n.k}','taken')">Принял</button><button class="mb no" style="flex:1" onclick="mark('${n.k}','missed')">Пропустил</button></div>${p.length>1?`<div class="sub" style="font-size:16px">Ещё сегодня: ${p.length-1}</div>`:''}`:'<div style="font-size:22px;font-weight:600;color:#0F6E56">Все лекарства на сегодня отмечены</div>')+lowH()}
+function medForm(m){MF=m?{id:m.id,name:m.name,dose:m.dose||'',t:[...m.times,''],stock:m.stock,per:m.per}:{name:'',dose:'',t:['08:00','',''],stock:null,per:1};if(CUR==='meds')meds()}
+function medAddTime(){if(MF.t.length>=12){toast('Не больше 12 приёмов в день');return}MF.name=$('mn').value;MF.dose=$('md').value;MF.stock=$('ms').value;MF.per=$('mp').value;MF.t=[...document.querySelectorAll('.mt')].map(i=>i.value);MF.t.push('');meds()}
+function medSave(){const name=$('mn').value.trim(),dose=$('md').value.trim(),t=[...document.querySelectorAll('.mt')].map(i=>i.value).filter(Boolean);
+if(!name){toast('Введите название лекарства');return}if(!t.length){toast('Укажите время приёма');return}
+const times=[...new Set(t)].sort(),stock=$('ms').value===''?null:Math.max(0,parseInt($('ms').value)||0),per=Math.max(1,parseInt($('mp').value)||1);
+if(MF.id)Object.assign(D.meds.find(x=>x.id===MF.id),{name,dose,times,stock,per});else D.meds.push({id:Date.now().toString(36),name,dose,times,stock,per,since:dk(new Date())});
+MF=null;save();meds();remCheck()}
+function medDel(id){const m=D.meds.find(x=>x.id===id);if(m&&confirm('Удалить «'+m.name+'»?')){D.meds=D.meds.filter(x=>x.id!==id);save();meds();remCheck()}}
+function meds(){const b=$('mbody'),ex='style="background:#fff;color:#534AB7;border:2px solid #534AB7"';
+if(MF){b.innerHTML=`<div class="card"><div style="font-size:22px;font-weight:600">${MF.id?'Изменить лекарство':'Новое лекарство'}</div><input id="mn" placeholder="Название" aria-label="Название лекарства" value="${esc(MF.name)}"><input id="md" placeholder="Доза, например 1 таблетка" aria-label="Доза" value="${esc(MF.dose)}"><input id="ms" type="number" inputmode="numeric" min="0" placeholder="Осталось таблеток (необязательно)" aria-label="Осталось таблеток" value="${MF.stock==null?'':MF.stock}"><input id="mp" type="number" inputmode="numeric" min="1" placeholder="Таблеток за один приём (по умолчанию 1)" aria-label="Таблеток за один приём" value="${MF.per>1?MF.per:''}"><div class="sub" style="font-size:16px">Время приёма (пустые поля не учитываются)</div>${MF.t.map((v,i)=>`<input class="mt" type="time" aria-label="Время ${i+1}" value="${v||''}">`).join('')}<button class="big" ${ex} onclick="medAddTime()">+ Добавить время приёма</button><button class="big" onclick="medSave()">Сохранить</button><button class="big" ${ex} onclick="MF=null;meds()">Отмена</button></div>`;return}
+const seg=`<div style="display:flex;gap:10px"><button class="sg ${HT==='med'?'on':''}" onclick="HT='med';meds()">Лекарства</button><button class="sg ${HT==='bp'?'on':''}" onclick="HT='bp';meds()">Давление</button></div>`;
+if(HT==='bp'){b.innerHTML=seg+bpHtml();return}
+const ds=dosesToday(),now=nowHM();
+const today=ds.length?ds.map(o=>`<div class="card"><div style="display:flex;gap:14px;align-items:center"><div style="font-size:28px;font-weight:700;min-width:84px">${o.t}</div><div style="flex:1"><div style="font-size:20px;font-weight:600">${esc(o.m.name)}</div><div class="sub" style="font-size:16px">${esc(o.m.dose||'')}</div></div></div>${o.e?(o.e.st==='taken'?`<div style="color:#0F6E56;font-weight:700;font-size:20px">✓ Принято в ${new Date(o.e.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}</div>`:'<div style="color:#A32D2D;font-weight:700;font-size:20px">Пропущено</div>'):`<div style="display:flex;gap:10px"><button class="mb ok" style="flex:1" onclick="mark('${o.k}','taken')">Принял</button><button class="mb no" style="flex:1" onclick="mark('${o.k}','missed')">Пропустил</button></div>`}</div>`).join(''):'<div class="card"><div class="sub">Лекарств пока нет. Добавьте первое.</div></div>';
+const mine=D.meds.map(m=>`<div class="card"><div style="font-size:20px;font-weight:600">${esc(m.name)}${m.dose?', '+esc(m.dose):''}</div><div class="sub" style="font-size:18px">${m.times.join(', ')}</div>${stockLine(m)}<div style="display:flex;gap:10px;flex-wrap:wrap">${m.stock!=null?`<button class="mb" style="flex:1 1 100%;background:#E4DFD2;color:#1C2A33" onclick="medRefill('${m.id}')">Пополнить запас</button>`:''}<button class="mb" style="flex:1;background:#E4DFD2;color:#1C2A33" onclick="medForm(D.meds.find(x=>x.id==='${m.id}'))">Изменить</button><button class="mb no" style="flex:1" onclick="medDel('${m.id}')">Удалить</button></div></div>`).join('');
+const nt='Notification' in window&&Notification.permission==='default'?`<div class="card"><div style="font-size:20px;font-weight:600">Уведомления</div><div class="sub" style="font-size:16px">Разрешите, чтобы напоминание приходило, даже если приложение свёрнуто. При полностью закрытом приложении напоминания пока не приходят.</div><button class="big" ${ex} onclick="Notification.requestPermission().then(()=>meds())">Разрешить уведомления</button></div>`:'';
+b.innerHTML=seg+`<div class="sub" style="font-weight:600;margin:0">Сегодня</div>${today}${nt}`+(D.meds.length?`<div class="sub" style="font-weight:600;margin:0">Мои лекарства</div>${mine}`:'')+`<button class="big" onclick="medForm()">Добавить лекарство</button><p class="sub" style="font-size:16px;margin:0">Приложение не назначает лечение. Список лекарств вносите вы или ваш врач.</p>`}
+function medChart(){const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d}),dd=days.map(dk),nd=dk(new Date()),nt=nowHM(),rows=[];
+D.meds.forEach(m=>m.times.forEach(t=>rows.push({id:m.id,name:m.name,dose:m.dose,t,since:m.since})));
+D.mlog.forEach(x=>{if(dd.includes(x.date)&&!rows.some(r=>r.id===x.id&&r.t===x.time))rows.push({id:x.id,name:x.name,dose:x.dose,t:x.time,gone:1})});
+MST={tk:0,tot:0};if(!rows.length)return'';
+const body=rows.map(r=>`<tr><td style="padding:6px 4px 6px 0;border-bottom:1px solid #E4DFD2;font-size:14px">${esc(r.name)}${r.dose?', '+esc(r.dose):''}<br><span style="color:#4A5961">${r.t}</span></td>`+dd.map(d=>{const e=mget(r.id+'|'+d+'|'+r.t),sc=!r.gone&&d>=(r.since||d)&&(d<nd||(d===nd&&r.t<=nt));let c='·',col='#C5C0B0';
+if(e){MST.tot++;if(e.st==='taken'){c='✓';col='#0F6E56';MST.tk++}else{c='✗';col='#A32D2D'}}else if(sc){MST.tot++;c='—';col='#8A8472'}
+return `<td style="text-align:center;font-weight:700;color:${col};padding:6px 2px;border-bottom:1px solid #E4DFD2">${c}</td>`}).join('')+'</tr>').join('');
+return `<div style="font-size:18px;font-weight:600">Приём лекарств, 7 дней</div><div style="font-size:16px">Принято: <b>${MST.tk} из ${MST.tot}</b>${MST.tot?' ('+Math.round(MST.tk/MST.tot*100)+'%)':''}</div><table style="width:100%;border-collapse:collapse"><tr><th></th>${days.map(d=>`<th style="font-size:12px;font-weight:600;padding:4px 2px">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</th>`).join('')}</tr>${body}</table><div style="font-size:12px;color:#4A5961">✓ принято, ✗ пропущено, — нет отметки, · приём ещё не наступил</div>`}
+let HT='med',BPM=null;
+const daysLeft=m=>m.stock==null?null:Math.floor(m.stock/(m.times.length*(m.per||1)));
+function stockLine(m){if(m.stock==null)return'';const d=daysLeft(m);return `<div style="font-size:18px;font-weight:600;color:${d<=3?'#A32D2D':'#4A5961'}">Осталось: ${m.stock}${m.stock===0?'. Закончились':'. Хватит на '+d+' дн.'}</div>`}
+function lowH(){const low=D.meds.filter(m=>m.stock!=null&&daysLeft(m)<=3);return low.length?`<div style="color:#A32D2D;font-weight:600;font-size:16px">Заканчивается: ${low.map(m=>esc(m.name)+(m.stock===0?' (закончились)':' (хватит на '+daysLeft(m)+' дн.)')).join(', ')}</div>`:''}
+function medRefill(id){const m=D.meds.find(x=>x.id===id),v=parseInt(prompt('Сколько таблеток добавили?'));if(m&&v>0){m.stock=(m.stock||0)+v;save();meds();remCheck()}}
+const ML={good:'Хорошо',ok:'Нормально',bad:'Плохо'};
+function bpMood(v){BPM=v;document.querySelectorAll('[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===v))}
+function bpAdd(){const g=i=>{const v=parseInt($(i).value);return isNaN(v)?null:v},sys=g('bs'),dia=g('bd'),pl=g('bp');
+if(sys==null&&dia==null&&pl==null&&!BPM){toast('Введите давление, пульс или самочувствие');return}
+if((sys==null)!==(dia==null)){toast('Введите оба числа давления');return}
+if(sys!=null&&dia>=sys){toast('Верхнее давление должно быть больше нижнего');return}
+if((sys!=null&&(sys<50||sys>260||dia<30||dia>160))||(pl!=null&&(pl<30||pl>220))){toast('Проверьте числа, похоже на опечатку');return}
+D.bp.push({t:new Date().toISOString(),sys,dia,pl,mood:BPM});BPM=null;save();meds()}
+function bpDel(t){if(confirm('Удалить запись?')){D.bp=D.bp.filter(x=>x.t!==t);save();meds()}}
+function bpHtml(){const inp=(id,p)=>`<input id="${id}" type="number" inputmode="numeric" placeholder="${p}" aria-label="${p}" style="font-size:20px;padding:0 6px;text-align:center">`;
+const list=D.bp.slice(-10).reverse().map(x=>`<div class="card"><div style="font-size:16px;color:#4A5961">${rdate(x.t)}</div><div style="font-size:22px;font-weight:600">${x.sys!=null?x.sys+'/'+x.dia:'—'}${x.pl!=null?', пульс '+x.pl:''}</div>${x.mood?`<div style="font-size:18px">Самочувствие: ${ML[x.mood]}</div>`:''}<button class="mb no" style="height:44px;font-size:16px" onclick="bpDel('${x.t}')">Удалить</button></div>`).join('');
+return `<div class="card"><div style="font-size:22px;font-weight:600">Новая запись</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${inp('bs','Верхнее')}${inp('bd','Нижнее')}${inp('bp','Пульс')}</div><div class="sub" style="font-size:16px">Самочувствие</div><div style="display:flex;gap:8px"><button class="sg" data-m="good" onclick="bpMood('good')">Хорошо</button><button class="sg" data-m="ok" onclick="bpMood('ok')">Нормально</button><button class="sg" data-m="bad" onclick="bpMood('bad')">Плохо</button></div><button class="big" onclick="bpAdd()">Записать</button></div>${D.bp.length?`<div class="sub" style="font-weight:600;margin:0">Последние записи</div>${list}`:''}<p class="sub" style="font-size:16px;margin:0">Приложение только записывает измерения и не оценивает их.</p>`}
+function bpTable(){const w=Date.now()-7*864e5,r=D.bp.filter(x=>new Date(x.t)>=w);if(!r.length)return'';const td='padding:5px 4px;border-bottom:1px solid #E4DFD2;vertical-align:top';
+return `<div style="font-size:18px;font-weight:600">Давление и самочувствие, 7 дней</div><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th style="text-align:left;padding:4px">Дата</th><th style="text-align:left;padding:4px">Давление</th><th style="text-align:left;padding:4px">Пульс</th><th style="text-align:left;padding:4px">Самочувствие</th></tr>${r.map(x=>`<tr><td style="${td}">${rdate(x.t)}</td><td style="${td}">${x.sys!=null?x.sys+'/'+x.dia:'—'}</td><td style="${td}">${x.pl!=null?x.pl:'—'}</td><td style="${td}">${x.mood?ML[x.mood]:'—'}</td></tr>`).join('')}</table><div style="font-size:12px;color:#4A5961">Значения записаны пациентом, приложение их не оценивает.</div>`}
+function callRel(){const c=D.ct;if(c)location.href='tel:'+c.phone.replace(/[^\d+]/g,'');else{toast('Сначала укажите близкого человека');go('family')}}
+function callUI(){const c=D.ct;$('callb').innerHTML='Позвонить близким'+(c?`<span style="display:block;font-size:16px;font-weight:500;margin-top:2px">${esc(c.name)}</span>`:'')}
+function results(){const r=D.res,lm=[...r].reverse().find(x=>x.mem!=null),la=[...r].reverse().find(x=>x.att!=null),ll=[...r].reverse().find(x=>x.log!=null);$('cnt').textContent='Занятий: '+r.length;
+const row=(n,v)=>`<div><div class="row"><span>${n}</span><b>${v==null?'—':v+'%'}</b></div><div class="bar"><i style="width:${v||0}%"></i></div></div>`;
+$('rbars').innerHTML=row('Память',lm&&lm.mem)+row('Внимание',la&&la.att)+row('Речь (скоро)',null)+row('Логика',ll&&ll.log);
+const p=r.filter(x=>x.mem!=null).slice(-8);$('chart').innerHTML=p.length<2?'<p class="sub">График появится после двух занятий</p>':`<svg width="100%" viewBox="0 0 300 120" role="img" aria-label="Динамика памяти"><polyline fill="none" stroke="#0F6E56" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${p.map((x,i)=>(20+i*260/(p.length-1))+','+(100-x.mem*.8)).join(' ')}"/>${p.map((x,i)=>`<circle cx="${20+i*260/(p.length-1)}" cy="${100-x.mem*.8}" r="5" fill="#0F6E56"/>`).join('')}</svg>`}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+setInterval(remCheck,20000);document.addEventListener('visibilitychange',remCheck);
+go(D.name?'home':'name');
+</script></body></html>
