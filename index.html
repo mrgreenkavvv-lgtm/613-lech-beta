@@ -95,7 +95,7 @@ html[data-theme=hc] .xpaper{background-image:none}
 <button class="tile" id="sndb" style="min-height:96px;justify-content:center" onclick="sndToggle()"></button>
 <button class="tile" style="min-height:96px;justify-content:center" onclick="go('news')"><b style="margin:0">Что нового</b><span class="t">Список изменений по версиям</span></button>
 <button class="tile" style="min-height:96px;justify-content:center" onclick="go('about')"><b style="margin:0">О приложении</b><span class="t">Авторы, версия</span></button></section>
-<section class="s" id="about"><button class="back" onclick="go('more')">‹ Назад</button><img src="logo.png" alt="Логотип ВолгГМУ" style="height:120px;align-self:center"><h1 style="text-align:center">О приложении</h1><p class="sub" style="text-align:center;margin:0">Помощник для тренировки памяти и внимания у пожилых людей</p><div class="card" style="gap:16px"><div><div class="lb">Научный руководитель</div><div id="sup" class="nm"></div></div><div><div class="lb">Разработчик приложения</div><div id="dev" class="nm"></div></div><div><div class="lb">Участники научной работы</div><div id="crew" class="nm"></div></div></div><div class="card"><div class="sub">Научная работа студентов ВолгГМУ, 613 леч</div><div class="sub">Версия 0.34 - beta</div></div><p class="sub" style="font-size:calc(16px * var(--fs));margin:0">Приложение не заменяет консультацию врача и не ставит диагноз.</p></section>
+<section class="s" id="about"><button class="back" onclick="go('more')">‹ Назад</button><img src="logo.png" alt="Логотип ВолгГМУ" style="height:120px;align-self:center"><h1 style="text-align:center">О приложении</h1><p class="sub" style="text-align:center;margin:0">Помощник для тренировки памяти и внимания у пожилых людей</p><div class="card" style="gap:16px"><div><div class="lb">Научный руководитель</div><div id="sup" class="nm"></div></div><div><div class="lb">Разработчик приложения</div><div id="dev" class="nm"></div></div><div><div class="lb">Участники научной работы</div><div id="crew" class="nm"></div></div></div><div class="card"><div class="sub">Научная работа студентов ВолгГМУ, 613 леч</div><div class="sub">Версия 0.35 - beta</div></div><p class="sub" style="font-size:calc(16px * var(--fs));margin:0">Приложение не заменяет консультацию врача и не ставит диагноз.</p></section>
 <section class="s" id="tests"><h1>Тесты и тренинги</h1>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><button class="tile tt " style="--dc:var(--c1)" onclick="words()"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><b>Запоминание слов</b><span class="t">3 уровня · Память</span></button>
 <button class="tile tt " style="--dc:var(--c1)" onclick="tstart('corsi')"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><b>Тест Корси</b><span class="t">3 уровня · Память</span></button>
@@ -128,8 +128,8 @@ html[data-theme=hc] .xpaper{background-image:none}
 <div id="rem" class="np" style="display:none;position:fixed;top:12px;left:12px;right:12px;max-width:456px;margin:0 auto;background:var(--card);border:2px solid var(--dgo);border-radius:18px;padding:16px;z-index:10;box-shadow:0 6px 24px rgba(0,0,0,.18)"></div>
 <div id="toast">Этот раздел появится в следующей версии</div>
 <script>
-/* © 2026 Азерин В. А., ВолгГМУ, 613 леч. Метка сборки: AVA-613-VGMU-20261116-p2Kw7 */
-const _sig="AVA-613-VGMU-20261116-p2Kw7";function __vgmu613_ava(){return _sig}document.documentElement.setAttribute("data-build",_sig);
+/* © 2026 Азерин В. А., ВолгГМУ, 613 леч. Метка сборки: AVA-613-VGMU-20261116-m8Zq3 */
+const _sig="AVA-613-VGMU-20261116-m8Zq3";function __vgmu613_ava(){return _sig}document.documentElement.setAttribute("data-build",_sig);
 const SUP='Ивахненко Ирина Вячеславовна';/* научный руководитель */
 const DEV=['Азерин Владимир Александрович'];/* разработчик приложения */
 const CREW=['Дорошенко Родион Романович','Беляев Даниил Игоревич'];/* участники научной работы, добавлять сюда */
@@ -426,6 +426,7 @@ function sndUI(){const b=$('sndb');if(b)b.innerHTML='<b style="margin:0">Зву�
 function sndToggle(){D.snd=D.snd===false;save();sndUI();snd('ok')}
 /* Список изменений: новая версия добавляется В НАЧАЛО списка */
 const CL=[
+['0.35 - beta',['Кроссворд: исправлен ввод букв на пересечениях слов. Раньше курсор перескакивал клетку, где буква уже стояла, и остальные буквы съезжали','Теперь слово набирается как обычно: стоящую на пересечении букву можно ввести (она просто пропустит курсор дальше) или пропустить — тогда следующая буква встанет на своё место','При выборе слова курсор встаёт на его первую клетку, а не на первую пустую']],
 ['0.34 - beta',['Кроссворд оформлен как страница старой газеты: тёплая бумага, газетная шапка, двойная линейка под ней','В тёмной теме бумага тёмная, в «Высоком контрасте» — без текстуры и пожелтения, чтобы читаемость не пострадала','Размер клетки не уменьшился: 43 px на экране 390 px, при восьми столбцах']],
 ['0.33 - beta',['Кроссворды: было 5 уровней, стало 50 — простые слова, разные сетки, сложность не растёт','Новый «Кроссворд дня»: своя сетка на каждый день недели, одна попытка в день, доступен всегда и не идёт в статистику']],
 ['0.32 - beta',['Проверка сохранения: если результат не записался (мало свободного места или ограничения браузера), приложение больше не молчит — показывает крупное предупреждение с просьбой показать телефон исследователю']],
@@ -514,12 +515,12 @@ function xstartQ(q,o){const c=o.resume||null;X={lvl:o.lvl,daily:o.daily||null,q,
 if(c)c.solved.forEach(i=>X.solved[i]=true);X.q[2].forEach((w,i)=>{if(!X.solved[i]){const k=xwk(i);if(k.every(x=>X.v[x])&&k.map(x=>X.v[x]).join('')!==w[4])X.flag[i]=true}});
 X.sel=xk(X.q[2][0][2],X.q[2][0][3]);X.dir=X.q[2][0][1];go('xgame');xrender()}
 function xtap(r,c){const key=xk(r,c),ce=X.cells[key];if(!ce)return;if(X.sel===key&&Object.keys(ce.w).length>1)X.dir=X.dir==='A'?'D':'A';else{X.sel=key;if(ce.w[X.dir]==null)X.dir=ce.w.A!=null?'A':'D'}xrender();xfocus()}
-function xpick(i){const k=xwk(i),first=k.find(x=>!xlock(x)&&!X.v[x])||k.find(x=>!xlock(x))||k[0];X.sel=first;X.dir=X.q[2][i][1];xrender();xfocus()}
+function xpick(i){const k=xwk(i),first=k[0];X.sel=first;X.dir=X.q[2][i][1];xrender();xfocus()}
 function xfocus(){const i=$('xin');i.value=' ';try{i.focus({preventScroll:true})}catch(e){i.focus()}}
 function xcheck(i,count){if(X.solved[i])return;const k=xwk(i),a=X.q[2][i][4];if(k.some(x=>!X.v[x]))return;if(k.map(x=>X.v[x]).join('')===a){X.solved[i]=true;X.wt[i]=Math.round(X.el+(Date.now()-X.t0)/1000)}else{X.flag[i]=true;if(count){X.wrong++;toast('Слово введено неверно')}}}
-function xnext(){const ce=X.cells[X.sel],i=ce.w[X.dir],k=xwk(i),p=k.indexOf(X.sel);for(let j=p+1;j<k.length;j++){if(!xlock(k[j])){X.sel=k[j];return}}}
+function xnext(){const ce=X.cells[X.sel],i=ce.w[X.dir],k=xwk(i),p=k.indexOf(X.sel);if(p>=0&&p<k.length-1)X.sel=k[p+1]}
 function xtype(ch){if(!X||X.fin)return;let l=ch.toLowerCase();if(l==='ё')l='е';if(!/^[а-я]$/.test(l)){if(!XWARN){XWARN=true;toast('Включите на клавиатуре русские буквы')}return}
-const ce=X.cells[X.sel];if(xlock(X.sel)){xnext();xrender();return}X.v[X.sel]=l;X.src[X.sel]='u';const ws=Object.values(ce.w),was={};ws.forEach(i=>{was[i]=!!X.flag[i];delete X.flag[i]});ws.forEach(i=>xcheck(i,!was[i]));xnext();xsave();xrender();xdone()}
+let key=X.sel;if(xlock(key)){if((X.v[key]||'')===l){xnext();xrender();return}xnext();if(xlock(X.sel)||X.sel===key){xrender();return}key=X.sel}const ce=X.cells[key];X.v[key]=l;X.src[key]='u';const ws=Object.values(ce.w),was={};ws.forEach(i=>{was[i]=!!X.flag[i];delete X.flag[i]});ws.forEach(i=>xcheck(i,!was[i]));xnext();xsave();xrender();xdone()}
 function xback(){if(!X||X.fin)return;const ce=X.cells[X.sel],i=ce.w[X.dir],k=xwk(i);let key=X.sel;if(!X.v[key]||xlock(key)){let j=k.indexOf(key)-1;while(j>=0&&xlock(k[j]))j--;if(j<0)return;key=k[j];X.sel=key}
 if(xlock(key))return;delete X.v[key];delete X.src[key];Object.values(X.cells[key].w).forEach(i=>delete X.flag[i]);xsave();xrender()}
 function xhint(){if(!X||X.fin)return;const bad=k=>!xlock(k)&&X.v[k]!==X.cells[k].a,ce=X.cells[X.sel],aw=ce.w[X.dir],k=aw!=null?xwk(aw):[];let cand=bad(X.sel)?X.sel:(k.find(bad)||Object.keys(X.cells).find(bad));
